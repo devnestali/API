@@ -1,18 +1,16 @@
 require("express-async-errors");
-const database = require("./database/sqlite"); // Por padrao, ele procura e carrega o index
+const migrationsRun = require("./database/sqlite/migrations"); // Por padrao, ele procura e carrega o index
 const AppError = require("./utils/AppError")
 
 const express = require("express");
 
 const routes = require("./routes"); // Por padrao, ele procura e carrega o index
-
+migrationsRun();
 
 const app = express();
 app.use(express.json());
 
 app.use(routes);
-
-database();
 
 app.use(( error, request, response, next ) => {
   if(error instanceof AppError){
